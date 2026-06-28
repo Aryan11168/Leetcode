@@ -12,8 +12,10 @@ bool isDiffOne(string &a, string &b) {
 
 int ladderLength(string beginWord, string endWord, vector<string>& wordList){
     int n = wordList.size();
-    if (find(wordList.begin(), wordList.end(), beginWord) == wordList.end())
+    if (find(wordList.begin(), wordList.end(), beginWord) == wordList.end()){
+        n++;
         wordList.push_back(beginWord);
+    }
     int start = -1, end = -1;
     for (int i = 0; i < wordList.size(); i++) {
         if (wordList[i] == beginWord) start = i;
