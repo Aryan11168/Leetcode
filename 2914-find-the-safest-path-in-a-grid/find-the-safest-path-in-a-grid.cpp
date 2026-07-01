@@ -29,16 +29,17 @@ public:
         }
         priority_queue<tuple<int,int,int>> pq;
         pq.push({safe[0][0],0,0});
-        safe[0][0]=-1;
+        vector<vector<int>> vis(n,vector<int>(n,0));
         while(!pq.empty()){
             auto [dist,x,y]=pq.top();pq.pop();
             if(x==n-1 && y==n-1) return dist;
+            if(vis[x][y]) continue;
+            vis[x][y]=1;
             for(auto v:dirs){
                 int a=x+v[0];
                 int b=y+v[1];
                 if(min(a,b)>=0 && max(a,b)<n && safe[a][b]!=-1){
                     pq.push({min(dist,safe[a][b]),a,b});
-                    safe[a][b]=-1;
                 }
             }
         }
