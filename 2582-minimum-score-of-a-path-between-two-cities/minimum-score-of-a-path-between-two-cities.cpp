@@ -15,21 +15,17 @@ public:
         int mini=INT_MAX;
         vector<int> vis(n+1,0);
         vis[1]=1;
+        int ans=INT_MAX;
         while(!pq.empty()){
             auto u=pq.front();pq.pop();
             for(auto [v,l]:adj[u]){
+                ans=min(ans,l);
                 if(vis[v]) continue;
                 pq.push(v);
                 vis[v]=1;
             }
         }
-        int ans=INT_MAX;
-        for(auto vec:roads){
-            int u=vec[0];
-            int v=vec[1];
-            int dist=vec[2];
-            if(vis[u] && vis[v]) ans=min(ans,dist);
-        }
+        
         return ans;
     }
 };
