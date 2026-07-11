@@ -1,9 +1,12 @@
 class Solution {
 public:
     int findFinalValue(vector<int>& nums, int original) {
-        unordered_set<int> st(nums.begin(),nums.end());
-        while(st.count(original)!=0){
-            original*=2;
+        int n=nums.size();
+        for(int i=0;i<n;i++){
+            if(nums[i]==original){
+                original*=2;
+                i=-1;
+            }
         }
         return original;
     }
