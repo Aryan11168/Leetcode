@@ -8,6 +8,6 @@ public:
                 ans=max(ans,nums[j]-nums[i]);
             }
         }
-        return ans==0?-1:ans;
+        return ans==0?-1:ans; 
     }
 };
