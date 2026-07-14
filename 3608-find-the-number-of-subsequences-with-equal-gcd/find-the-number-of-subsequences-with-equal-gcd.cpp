@@ -1,22 +1,50 @@
 class Solution {
 public:
-    int mod=1e9+7;
-    int solve(vector<int>& nums,int ind,int gcd1,int gcd2,vector<vector<vector<int>>>& dp){
-        if(ind==nums.size()){
-            if(gcd1 && gcd2 && gcd1==gcd2) return 1;
-            return 0;
-        }
-        if(dp[ind][gcd1][gcd2]!=-1) return dp[ind][gcd1][gcd2];
-        int skip=solve(nums,ind+1,gcd1,gcd2,dp);
-        int seq1=solve(nums,ind+1,__gcd(gcd1,nums[ind]),gcd2,dp);
-        int seq2=solve(nums,ind+1,gcd1,__gcd(gcd2,nums[ind]),dp);
-        return dp[ind][gcd1][gcd2]=(0LL+skip+seq1+seq2)%mod;
-    }
+    static const int MOD = 1e9 + 7;
+
     int subsequencePairCount(vector<int>& nums) {
-        int n=nums.size();
-        int maxi=nums[0];
-        for(int i:nums) maxi=max(maxi,i);
-        vector<vector<vector<int>>> dp(n,vector<vector<int>>(maxi+1,vector<int>(maxi+1,-1)));
-        return solve(nums,0,0,0,dp);
+        int n = nums.size();
+
+        // dp[i][g1][g2]
+        // After processing first i elements,
+        // gcd(seq1)=g1, gcd(seq2)=g2
+        vector<vector<vector<int>>> dp(n + 1,vector<vector<int>>(201, vector<int>(201, 0)));
+
+        dp[0][0][0] = 1;
+
+        for (int i = 0; i < n; i++) {
+            int x = nums[i];
+
+            for (int g1 = 0; g1 <= 200; g1++) {
+                for (int g2 = 0; g2 <= 200; g2++) {
+
+                    if (dp[i][g1][g2] == 0) continue;
+
+                    long long ways = dp[i][g1][g2];
+
+                    // 1. Ignore x
+                    dp[i + 1][g1][g2] =
+                        (dp[i + 1][g1][g2] + ways) % MOD;
+
+                    // 2. Put x in seq1
+                    int ng1 = (g1 == 0) ? x : gcd(g1, x);
+                    dp[i + 1][ng1][g2] =
+                        (dp[i + 1][ng1][g2] + ways) % MOD;
+
+                    // 3. Put x in seq2
+                    int ng2 = (g2 == 0) ? x : gcd(g2, x);
+                    dp[i + 1][g1][ng2] =
+                        (dp[i + 1][g1][ng2] + ways) % MOD;
+                }
+            }
+        }
+
+        long long ans = 0;
+
+        for (int g = 1; g <= 200; g++) {
+            ans = (ans + dp[n][g][g]) % MOD;
+        }
+
+        return ans;
     }
 };
