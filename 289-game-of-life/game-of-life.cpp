@@ -1,19 +1,32 @@
 class Solution {
 public:
-void gameOfLife(vector<vector<int>>& board) {
-    int m = board.size(), n = m ? board[0].size() : 0;
-    for (int i=0; i<m; ++i) {
-        for (int j=0; j<n; ++j) {
-            int count = 0;
-            for (int I=max(i-1, 0); I<min(i+2, m); ++I)
-                for (int J=max(j-1, 0); J<min(j+2, n); ++J)
-                    count += board[I][J] & 1;
-            if (count == 3 || count - board[i][j] == 3)
-                board[i][j] |= 2;
+    void gameOfLife(vector<vector<int>>& board) {
+        int m=board.size();
+        int n=board[0].size();
+        vector<vector<int>> dirs={{0,1},{0,-1},{1,0},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
+        vector<vector<int>> grid=board;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                int cnt=0;
+                for(auto it:dirs){
+                    int x=i+it[0];
+                    int y=j+it[1];
+                    if(min(x,y)>=0 && x<m && y<n){
+                        if(board[x][y]==1) cnt++;
+                    }
+                }
+                if(board[i][j]==1){
+                    if(cnt<2 || cnt>3){
+                        grid[i][j]=0;
+                    }
+                }
+                else {
+                    if(cnt==3){
+                        grid[i][j]=1;
+                    }
+                }
+            }
         }
+        board=grid;
     }
-    for (int i=0; i<m; ++i)
-        for (int j=0; j<n; ++j)
-            board[i][j] >>= 1;
-}
 };
