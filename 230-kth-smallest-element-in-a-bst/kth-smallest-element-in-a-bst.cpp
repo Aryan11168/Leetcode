@@ -9,17 +9,36 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+/*class Solution {
 public:
-    void tra(TreeNode* root,vector<int>& inorder){
-        if(!root) return;
-        tra(root->left,inorder);
-        inorder.push_back(root->val);
-        tra(root->right,inorder);
+    void helper(TreeNode* root, int& k, int& ans){
+        if(root==nullptr) return;
+        helper(root->left, k, ans);
+        if(k==0) return;
+         k--;
+        if(k==0){
+          ans=root->val;
+          return;
+        }
+        helper(root->right, k, ans);
     }
     int kthSmallest(TreeNode* root, int k) {
-        vector<int> inorder;
-        tra(root,inorder);
-        return inorder[k-1];
+        int ans=0;
+        helper(root,k, ans);
+        return ans;
     }
-};
+};*/
+class Solution {
+public:
+    int helper(TreeNode* root, int& k){
+        if(root==nullptr) return 0;
+        int left=helper(root->left, k);
+        if(k==0) return left;
+        k--;
+        if(k==0) return root->val;
+        return helper(root->right,k);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        return helper(root, k);
+    }
+};   
