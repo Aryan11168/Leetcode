@@ -1,13 +1,20 @@
 class Solution {
 public:
+    void produce(vector<int> &ans,int prev,int n){
+        if(ans.size() == n) return;
+        for(int i = 0; i <= 9; i++){
+            int curr = prev*10 + i;
+            if(0 < curr && curr <= n){
+                ans.push_back(curr);
+            }
+            if(0 < curr && curr*10 <= n){
+                produce(ans,curr,n);
+            }
+        }
+    }
     vector<int> lexicalOrder(int n) {
         vector<int> ans;
-        for(int i=1;i<=n;i++) ans.push_back(i);
-        sort(ans.begin(),ans.end(),[](int& a,int& b){
-            string x=to_string(a);
-            string y=to_string(b);
-            return x<y;
-        });
+        produce(ans,0,n);
         return ans;
     }
 };
